@@ -1,32 +1,15 @@
-/*
- * Regular Expression Checker
- * Checks if a string matches the pattern:
- *   (a(b+a)*b) + (b(a+b)*a)
- *
- * This means: strings over {a, b} that either
- *   - start with 'a' and end with 'b', OR
- *   - start with 'b' and end with 'a'
- * with length >= 2, and all characters must be 'a' or 'b'.
- * 'e' is treated as epsilon (null) -> INVALID.
- */
-
 #include <stdio.h>
 #include <string.h>
 
 #define MAX_LEN 200
 
-/* Result codes */
 #define VALID   1
 #define INVALID 0
 
-/* Check the string against the regex pattern */
 int checkPattern(const char *str, char *reason) {
     int len = (int)strlen(str);
     int i;
 
-    /* Step 2: compute length (already done via strlen) */
-
-    /* Step 3 & 4: validate every character */
     for (i = 0; i < len; i++) {
         if (str[i] == 'e') {
             sprintf(reason, "Character 'e' (epsilon/null) found at position %d -- NULL is INVALID", i + 1);
@@ -38,7 +21,6 @@ int checkPattern(const char *str, char *reason) {
         }
     }
 
-    /* Step 5: length must be >= 2 */
     if (len < 2) {
         if (len == 0)
             sprintf(reason, "Empty string -- length must be >= 2");
@@ -47,7 +29,6 @@ int checkPattern(const char *str, char *reason) {
         return INVALID;
     }
 
-    /* Step 6: check first and last character */
     char first = str[0];
     char last  = str[len - 1];
 
@@ -65,7 +46,6 @@ int checkPattern(const char *str, char *reason) {
     }
 }
 
-/* Print a decorated result banner */
 void printResult(const char *str, int result, const char *reason) {
     printf("\n  Input string : \"%s\"\n", str);
     printf("  Length       : %d\n", (int)strlen(str));
@@ -93,7 +73,6 @@ int main() {
         printf("\nEnter string (a/b only, 'e' = epsilon): ");
         if (fgets(input, MAX_LEN, stdin) == NULL) break;
 
-        /* strip trailing newline */
         int inputLen = (int)strlen(input);
         if (inputLen > 0 && input[inputLen - 1] == '\n')
             input[inputLen - 1] = '\0';
@@ -103,7 +82,6 @@ int main() {
 
         printf("  Check another string? (y/n): ");
         scanf(" %c", &again);
-        /* flush leftover newline */
         while (getchar() != '\n');
 
     } while (again == 'y' || again == 'Y');
